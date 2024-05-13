@@ -3,6 +3,7 @@ from PIL import Image
 import ffmpeg
 import os
 
+
 class File:
 	def __init__(self, path):
 		self.path = path
@@ -11,7 +12,7 @@ class File:
 		self.extension = extension.lower()
 
 	def __repr__(self):
-		return self.full_path
+		return self.get_path()
 
 	def get_path(self):
 		return self.path
@@ -33,16 +34,16 @@ class File:
 		Return the date and time information about a photo/video as a datetime object.
 		"""
 		extension = self.get_extension()
-		if (extension == ".heic"):
+		if extension == ".heic":
 			image = Image.open(self.get_path())
 			return datetime.strptime(image.getexif()[306], "%Y:%m:%d %H:%M:%S")
-		elif (extension == ".mov" or extension == ".mp4"):
+		elif extension == ".mov" or extension == ".mp4":
 			vid = ffmpeg.probe(self.get_path())
 			try:
-				date_string = vid['streams'][0]['tags']['creation_time']
+				date_string = vid["streams"][0]["tags"]["creation_time"]
 				dt = datetime.strptime(date_string, "%Y-%m-%dT%H:%M:%S.000000Z")
 				# Return None if the datetime is the Unix epoch time
-				if (dt <= datetime(1970, 1, 1)):
+				if dt <= datetime(1970, 1, 1):
 					return None
 				return dt - timedelta(hours=4)
 			except (IndexError, KeyError):
@@ -50,15 +51,16 @@ class File:
 		else:
 			image = Image.open(self.get_path())
 			exif = image._getexif()
-			if (exif):
+			if exif:
 				date_string = exif.get(36867)
-				if (date_string is not None):
+				if date_string is not None:
 					return datetime.strptime(date_string, "%Y:%m:%d %H:%M:%S")
 
 	def rename(self, new_name, suffix=0):
 		try:
 			new_suffixed_name = f"{new_name}_{suffix}" if suffix > 0 else new_name
-			print(f"{self.get_path_tail()}\t->\t{new_suffixed_name}")
-			os.rename(self.get_path(), f"{self.get_path_head()}/{new_suffixed_name}{self.get_extension()}")
-		except (FileExistsError):
-			self.rename(new_name, suffix+1)
+			new_path_tail = f"{new_suffixed_name}{self.get_extension()}"
+			os.rename(self.get_path(), f"{self.get_path_head()}/{new_path_tail}")
+			return new_path_tail
+		except FileExistsError:
+			return self.rename(new_name, suffix + 1)
