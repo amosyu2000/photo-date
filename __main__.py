@@ -6,7 +6,7 @@ import os
 import uuid
 
 # CONSTANTS
-PHOTO_DIRECTORY = "C:/Users/Dell/Downloads/2023 - Copy"
+PHOTO_DIRECTORY = "D:\Photos"
 
 
 def get_datetime_name(dt):
