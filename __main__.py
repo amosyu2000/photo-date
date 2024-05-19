@@ -1,6 +1,6 @@
-from pillow_heif import register_heif_opener
-from classes.file import File
 from classes.csv_logger import CsvLogger
+from classes.file_factory import FileFactory
+from pillow_heif import register_heif_opener
 import glob
 import os
 import uuid
@@ -25,7 +25,7 @@ class Main:
 		register_heif_opener()
 
 		# Get all files in given directory
-		files = [File(path) for path in glob.glob(f"{PHOTO_DIRECTORY}/**/*", recursive=True) if not os.path.isdir(path)]
+		files = [FileFactory(path).get_file() for path in glob.glob(f"{PHOTO_DIRECTORY}/**/*", recursive=True) if not os.path.isdir(path)]
 		files.sort(key=lambda file: file.get_path(), reverse=True)
 		logger = CsvLogger()
 

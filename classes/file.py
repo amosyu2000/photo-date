@@ -1,7 +1,3 @@
-from datetime import datetime, timedelta
-from PIL import Image
-from PIL.TiffTags import TAGS
-import ffmpeg
 import os
 
 
@@ -34,39 +30,7 @@ class File:
 		"""
 		Return the date and time information about a photo/video as a datetime object.
 		"""
-		extension = self.get_extension()
-		if extension == ".heic":
-			image = Image.open(self.get_path())
-			date_string = image.getexif()[306]
-			return datetime.strptime(date_string, "%Y:%m:%d %H:%M:%S")
-		elif extension == ".mov" or extension == ".mp4" or extension == ".avi":
-			vid = ffmpeg.probe(self.get_path())
-			try:
-				date_string = vid["streams"][0]["tags"]["creation_time"]
-				dt = datetime.strptime(date_string, "%Y-%m-%dT%H:%M:%S.000000Z")
-				# Return None if the datetime is the Unix epoch time
-				if dt <= datetime(1970, 1, 1):
-					return None
-				return dt - timedelta(hours=4)
-			except (IndexError, KeyError):
-				return None
-		elif extension == ".nef":
-			image = Image.open(self.get_path())
-			date_string = image.tag[36867][0]
-			image.close()
-			return datetime.strptime(date_string, "%Y:%m:%d %H:%M:%S")
-		elif extension == ".jpg" or extension == ".jpeg" or extension == ".png" or extension == ".jfif" or extension == ".cr2" or extension == ".webp":
-			image = Image.open(self.get_path())
-			exif = image._getexif()
-			image.close()
-			if exif:
-				date_string = exif.get(36867)
-				if date_string == "0000:00:00 00:00:00":
-					return None
-				elif date_string is not None:
-					return datetime.strptime(date_string, "%Y:%m:%d %H:%M:%S")
-		else:
-			raise Exception(f"Method not supported for file {self.get_path()}")
+		raise Exception(f"Method not implemented for file '{self.get_path()}'")
 
 	def rename(self, new_name, suffix=0):
 		try:

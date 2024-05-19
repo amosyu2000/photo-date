@@ -6,7 +6,7 @@ class CsvLogger:
 		self.rows = []
 
 	def log(self, tup):
-		row = ",".join(str(i) for i in tup)
+		row = ",".join(f"\"{str(i)}\"" for i in tup)
 		self.rows.append(row)
 
 	def get_rows(self):
