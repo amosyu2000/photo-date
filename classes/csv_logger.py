@@ -1,5 +1,5 @@
 class CsvLogger:
-	FILE_NAME = "_log"
+	FILE_NAME = "photo_date_log"
 	FILE_EXTENSION = "csv"
 
 	def __init__(self):
@@ -12,6 +12,9 @@ class CsvLogger:
 	def get_rows(self):
 		return self.rows
 
+	def get_file(self):
+		return f"{self.get_file_name()}.{self.get_file_extension()}"
+
 	def get_file_name(self):
 		return self.FILE_NAME
 
@@ -19,6 +22,7 @@ class CsvLogger:
 		return self.FILE_EXTENSION
 
 	def save(self, dir):
-		f = open(f"{dir}/{self.get_file_name()}.{self.get_file_extension()}", "w")
+		f = open(f"{dir}/{self.get_file()}", "w")
 		f.write("\n".join(self.get_rows()))
 		f.close()
+		print(f"Generated log file '{self.get_file()}' in directory '{dir}'.")

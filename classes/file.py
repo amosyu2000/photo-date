@@ -30,12 +30,16 @@ class File:
 		"""
 		Return the date and time information about a photo/video as a datetime object.
 		"""
-		raise Exception(f"Method not implemented for file '{self.get_path()}'")
+		raise NotImplementedError(f"Method not implemented for file '{self.get_path()}'")
 
 	def rename(self, new_name, suffix=0):
 		try:
 			new_suffixed_name = f"{new_name}_{suffix}" if suffix > 0 else new_name
 			new_path_tail = f"{new_suffixed_name}{self.get_extension()}"
+
+			if (self.get_path_tail() == new_path_tail):
+				return None
+
 			os.rename(self.get_path(), f"{self.get_path_head()}/{new_path_tail}")
 			return new_path_tail
 		except FileExistsError:
