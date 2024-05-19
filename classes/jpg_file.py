@@ -10,7 +10,6 @@ class JpgFile(File):
 		image.close()
 		if exif:
 			date_string = exif.get(36867)
-			if date_string == "0000:00:00 00:00:00":
+			if date_string is None or date_string == "0000:00:00 00:00:00":
 				return None
-			elif date_string is not None:
-				return datetime.strptime(date_string, "%Y:%m:%d %H:%M:%S")
+			return datetime.strptime(date_string, "%Y:%m:%d %H:%M:%S")
