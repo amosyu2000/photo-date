@@ -2,6 +2,7 @@ from pillow_heif import register_heif_opener
 from classes.file import File
 from classes.csv_logger import CsvLogger
 import glob
+import os
 import uuid
 
 # CONSTANTS
@@ -24,7 +25,7 @@ class Main:
 		register_heif_opener()
 
 		# Get all files in given directory
-		files = [File(path) for path in glob.glob(f"{PHOTO_DIRECTORY}/*")]
+		files = [File(path) for path in glob.glob(f"{PHOTO_DIRECTORY}/**/*", recursive=True) if not os.path.isdir(path)]
 		files.sort(key=lambda file: file.get_path(), reverse=True)
 		logger = CsvLogger()
 
@@ -34,7 +35,7 @@ class Main:
 			while len(files) > 0 and files[-1].get_name() == like_files[0].get_name():
 				like_files.append(files.pop())
 
-			# Search for a non-zero datetime from the list of like paths
+			# Search for a non-zero datetime from the list of like files
 			dt = None
 			for file in like_files:
 				file_dt = file.get_datetime()
@@ -42,12 +43,12 @@ class Main:
 					dt = file_dt
 					break
 
-			# Apply the same datetime name to all like paths
+			# Apply the same datetime name to all like files
 			new_name = get_datetime_name(dt) if dt is not None else get_random_name()
 			for file in like_files:
 				logger.log((file.get_path_tail(), file.rename(new_name)))
 		
-		logger.save(PHOTO_DIRECTORY)
+		logger.save(os.path.dirname(PHOTO_DIRECTORY))
 
 if __name__ == "__main__":
 	Main()
