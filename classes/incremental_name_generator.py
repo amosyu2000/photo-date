@@ -9,7 +9,7 @@ class IncrementalNameGenerator:
 	def increment_index(self):
 		self.set_index(self.get_index() + 1)
 
-	def generate_name(self):
+	def get_next_name(self):
 		self.increment_index()
 		return f"img{str(self.get_index()).zfill(self.get_total_digits())}"
 
