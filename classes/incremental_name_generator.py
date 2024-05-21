@@ -11,7 +11,7 @@ class IncrementalNameGenerator:
 
 	def get_next_name(self):
 		self.increment_index()
-		return f"img{str(self.get_index()).zfill(self.get_total_digits())}"
+		return f"img{str(self.get_index()).zfill(self.get_zfill())}"
 
 	def get_index(self):
 		return self.index
@@ -19,7 +19,7 @@ class IncrementalNameGenerator:
 	def get_total_files(self):
 		return self.total_files
 
-	def get_total_digits(self):
+	def get_zfill(self):
 		return math.ceil(math.log10(self.get_total_files()))
 
 	def set_index(self, num):
