@@ -12,4 +12,5 @@ class HeicFile(File):
 	def get_datetime(self):
 		image = Image.open(self.get_path())
 		date_string = image.getexif()[306]
+		image.close()
 		return datetime.strptime(date_string, "%Y:%m:%d %H:%M:%S")
