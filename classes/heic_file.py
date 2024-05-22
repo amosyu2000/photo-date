@@ -5,12 +5,12 @@ from pillow_heif import register_heif_opener
 
 
 class HeicFile(File):
-	def __init__(self, path):
-		register_heif_opener()
-		super().__init__(path)
+    def __init__(self, path):
+        register_heif_opener()
+        super().__init__(path)
 
-	def get_datetime(self):
-		image = Image.open(self.get_path())
-		date_string = image.getexif()[306]
-		image.close()
-		return datetime.strptime(date_string, "%Y:%m:%d %H:%M:%S")
+    def get_datetime(self):
+        image = Image.open(self.get_path())
+        date_string = image.getexif()[306]
+        image.close()
+        return datetime.strptime(date_string, "%Y:%m:%d %H:%M:%S")
