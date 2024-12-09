@@ -49,7 +49,7 @@ class Edit:
             exit()
 
     def get_datetime_unit_input(self, datetime_unit):
-        datetime_unit_input = input(f"Enter a value for the {datetime_unit.get_name()} ({datetime_unit.get_default_value()}) ")
+        datetime_unit_input = input(f"Enter a value for the {datetime_unit.get_name()}. ({datetime_unit.get_default_value()}) ")
         if (datetime_unit_input == ''):
             return datetime_unit.get_default_value()
         if (datetime_unit.is_valid(datetime_unit_input)):
