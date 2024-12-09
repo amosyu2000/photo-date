@@ -1,10 +1,8 @@
-from classes.csv_logger import CsvLogger
+from classes.confirmation_input import ConfirmationInput
 from classes.datetime_unit import DatetimeUnit
 from classes.file_factory import FileFactory
 from datetime import datetime
 import click
-import glob
-import os
 
 
 @click.command()
@@ -22,10 +20,7 @@ class Edit:
         new_dt = self.get_datetime_input()
 
         # Confirm that the user wants to edit the files
-        confirmation = input(f"Set the Date Taken metadata to '{new_dt}' for {len(files)} files? This action cannot be undone. (y/n) ")
-        if (confirmation != "y"):
-            print("Command cancelled.")
-            return
+        ConfirmationInput(f"Set the Date Taken metadata to '{new_dt}' for {len(files)} files?")
         
         for file in files:
             try:

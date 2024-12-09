@@ -1,3 +1,4 @@
+from classes.confirmation_input import ConfirmationInput
 from classes.csv_logger import CsvLogger
 from classes.file_factory import FileFactory
 from classes.incremental_name_generator import IncrementalNameGenerator
@@ -17,10 +18,7 @@ class Rename:
         files = [FileFactory(path).get_file() for path in glob.glob(f"{directory}/**/*", recursive=True) if not os.path.isdir(path)]
 
         # Confirm that the user wants to rename the files
-        confirmation = input(f"Rename {len(files)} files in directory '{os.path.basename(directory)}'? This action cannot be undone. (y/n) ")
-        if (confirmation != "y"):
-            print("Command cancelled.")
-            return
+        ConfirmationInput(f"Rename {len(files)} files in directory '{os.path.basename(directory)}'?")
 
         files.sort(key=lambda file: file.get_path(), reverse=True)
         logger = CsvLogger()
