@@ -13,14 +13,13 @@ class Rename:
 
     def __init__(self, directory):
 
-        print(directory)
-
         # Get all files in given directory
         files = [FileFactory(path).get_file() for path in glob.glob(f"{directory}/**/*", recursive=True) if not os.path.isdir(path)]
 
         # Confirm that the user wants to rename the files
-        confirmation = input(f"Rename {len(files)} files in directory '{os.path.basename(directory)}'? This action cannot be undone. (Y/n) ")
-        if (confirmation != "Y"):
+        confirmation = input(f"Rename {len(files)} files in directory '{os.path.basename(directory)}'? This action cannot be undone. (y/n) ")
+        if (confirmation != "y"):
+            print("Command cancelled.")
             return
 
         files.sort(key=lambda file: file.get_path(), reverse=True)

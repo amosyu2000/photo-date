@@ -44,3 +44,9 @@ class File:
             return new_path_tail
         except FileExistsError:
             return self.rename(new_name, suffix + 1)
+        
+    def set_datetime(self, new_dt):
+        """
+        Set the date and time metadata for a photo/video.
+        """
+        raise NotImplementedError(f"Method not implemented for file '{self.get_path()}'")
