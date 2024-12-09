@@ -1,0 +1,15 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+ffmpeg = "*"
+ffmpeg-python = "*"
+pillow-heif = "*"
+click = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.12"
