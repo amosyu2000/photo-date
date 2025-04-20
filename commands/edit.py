@@ -3,19 +3,27 @@ from classes.datetime_unit import DatetimeUnit
 from classes.file_factory import FileFactory
 from datetime import datetime
 import click
+import glob
+import os
 
 
 @click.command()
-@click.option('--files', '-f', 'args_is_files', is_flag=True, required=True, help='The list of photos to edit.')
+@click.option('--directory', '-d', required=False, type=click.STRING, help='The directory containing the photos to edit.')
+@click.option('--files', '-f', 'args_is_files', required=False, is_flag=True, help='The list of photos to edit.')
 @click.argument('args', nargs=-1)
 class Edit:
     """Edit the Date Taken metadata of photos."""
 
-    def __init__(self, args_is_files, args):
+    def __init__(self, args_is_files, directory, args):
 
-        files = []
+        # Create file objects
+        path_args = []
         if (args_is_files):
-            files = [FileFactory(path).get_file() for path in args]
+            path_args = args
+        elif (directory):
+            path_args = [path for path in glob.glob(f"{directory}/**/*", recursive=True) if not os.path.isdir(path)]
+        files = [FileFactory(path).get_file() for path in path_args]
+        print(f"Selected {len(files)} files.")
 
         new_dt = self.get_datetime_input()
 
@@ -35,9 +43,9 @@ class Edit:
                 year=self.get_datetime_unit_input(DatetimeUnit(name="year", default_value=now_dt.year)),
                 month=self.get_datetime_unit_input(DatetimeUnit(name="month", default_value=now_dt.month, min_value=1, max_value=12)),
                 day=self.get_datetime_unit_input(DatetimeUnit(name="day", default_value=now_dt.day, min_value=1, max_value=31)),
-                hour=self.get_datetime_unit_input(DatetimeUnit(name="hour", default_value=now_dt.hour, min_value=1, max_value=24)),
-                minute=self.get_datetime_unit_input(DatetimeUnit(name="minutes", default_value=now_dt.minute, min_value=1, max_value=60)),
-                second=self.get_datetime_unit_input(DatetimeUnit(name="seconds", default_value=now_dt.second, min_value=1, max_value=60))
+                hour=self.get_datetime_unit_input(DatetimeUnit(name="hour", default_value=now_dt.hour, min_value=0, max_value=23)),
+                minute=self.get_datetime_unit_input(DatetimeUnit(name="minutes", default_value=now_dt.minute, min_value=0, max_value=59)),
+                second=self.get_datetime_unit_input(DatetimeUnit(name="seconds", default_value=now_dt.second, min_value=0, max_value=59))
             )
         except ValueError as e:
             print(e)
